@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.0 (2024-01-01)
+
+- GPSDClient now supports a `want_pps` param to request PPS and
+  TOFF stanzas from GPSd
+- Added tests for the CLI
+
+### Breaking Change
+
+- Due to adding `pytest` as a dev-dependency, the minimum supported version
+  is Python 3.9.
+
 ## v1.3.2 (2023-01-09)
 
 - Remove timezone information from CLI output (it's always UTC).

@@ -10,29 +10,29 @@ from . import GPSDClient
 Column = namedtuple("Column", "key width formatter")
 
 TPV_COLUMNS = (
-    Column("mode", width=4, formatter=str),
+    Column("mode", width=4, formatter=lambda x: format(x, "^4d")),
     Column(
         "time",
         width=20,
         formatter=lambda x: x.strftime("%Y-%m-%d %H:%M:%S"),
     ),
-    Column("lat", width=12, formatter=str),
-    Column("lon", width=12, formatter=str),
-    Column("track", width=6, formatter=str),
-    Column("speed", width=6, formatter=str),
-    Column("alt", width=9, formatter=str),
-    Column("climb", width=9, formatter=str),
+    Column("lat", width=12, formatter=lambda x: format(x, "< 12.7n")),
+    Column("lon", width=12, formatter=lambda x: format(x, "< 12.7n")),
+    Column("speed", width=6, formatter=lambda x: format(x, "< 6.3n")),
+    Column("track", width=9, formatter=lambda x: format(x, "< 9.5n")),
+    Column("alt", width=9, formatter=lambda x: format(x, "< 9.5n")),
+    Column("climb", width=9, formatter=lambda x: format(x, "< 9.5n")),
 )
 NA = "n/a"
 
 
 def print_version(data):
-    print("Connected to gpsd v%s" % data.get("release", NA))
+    print("Connected to gpsd v{}".format(data.get("release", NA)))
 
 
 def print_devices(data):
-    output = ", ".join(x.get("path", NA) for x in data["devices"])
-    print("Devices: %s" % output)
+    output = ", ".join(x.get("path", NA) for x in data.get("devices", []))
+    print(f"Devices: {output}")
 
 
 def print_tpv_header():
@@ -92,6 +92,7 @@ def main():
         action="store_true",
         help="Output as JSON strings",
     )
+    parser.add_argument("--pps", action="store_true", help="Enable PPS output")
     parser.add_argument(
         "--timeout",
         default=5.0,
@@ -100,7 +101,12 @@ def main():
     args = parser.parse_args()
 
     try:
-        client = GPSDClient(host=args.host, port=args.port, timeout=float(args.timeout))
+        client = GPSDClient(
+            host=args.host,
+            port=args.port,
+            timeout=float(args.timeout),
+            want_pps=args.pps,
+        )
         if args.json:
             stream_json(client)
         else:
@@ -108,7 +114,7 @@ def main():
     except KeyboardInterrupt:
         print()
         return 0
-    except (ConnectionError, EnvironmentError) as e:
+    except OSError as e:
         print(e)
         return 1
     except Exception:

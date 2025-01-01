@@ -1,0 +1,35 @@
+---
+# spell-checker: disable
+# See https://pre-commit.com/ for usage and config
+repos:
+  - hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-toml
+        stages:
+          - pre-commit
+        types:
+          - toml
+      - id: check-xml
+        stages:
+          - pre-commit
+        types:
+          - xml
+      - id: check-yaml
+        args:
+          - --allow-multiple-documents
+        stages:
+          - pre-commit
+        types:
+          - yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+    repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+
+ci:
+  # Leave pip-audit to only run locally and not in CI
+  # pre-commit.ci does not allow network calls
+  skip:
+    - pip-audit

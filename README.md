@@ -11,13 +11,13 @@
 Needs Python 3 (no other dependencies).
 If you want to use the library, use pip:
 
-```
+```shell
 pip3 install gpsdclient
 ```
 
 If you want to use only the standalone gpsd viewer, I recommend to use pipx:
 
-```
+```shell
 pipx install gpsdclient
 ```
 
@@ -51,7 +51,7 @@ You can find the documentation for the available data and JSON fields in the
 You can use the `gpsdclient` standalone program or execute the module with
 `python3 -m gpsdclient`.
 
-```
+```bash
 $ gpsdclient
 Connected to gpsd v3.17
 Devices: /dev/ttyO4
@@ -90,17 +90,19 @@ $ gpsdclient --json
 
 All command line options:
 
-```
+```shell
 $ gpsdclient -h
-usage: gpsdclient [-h] [--host HOST] [--port PORT] [--json]
+usage: gpsdclient [-h] [--host HOST] [--port PORT] [--json] [--pps] [--timeout TIMEOUT]
 
 Connect to a running gpsd instance and show human readable output.
 
-optional arguments:
-  -h, --help   show this help message and exit
-  --host HOST  The host running GPSD (default: 127.0.0.1)
-  --port PORT  GPSD port (default: 2947)
-  --json       Output as JSON strings (default: False)
+options:
+  -h, --help         show this help message and exit
+  --host HOST        The host running GPSD (default: 127.0.0.1)
+  --port PORT        GPSD port (default: 2947)
+  --json             Output as JSON strings (default: False)
+  --pps              Enable PPS output (default: False)
+  --timeout TIMEOUT  Socket timeout in seconds (default: 5.0)
 ```
 
 ## Why

@@ -1,28 +1,66 @@
 [tool.poetry]
-name = "gpsdclient"
-version = "1.3.2"
-description = "A simple gpsd client."
-authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/tfeldmann/gpsdclient"
-keywords = ["gpsd", "gps", "client", "standalone", "socket", "stream"]
-classifiers = [
-    # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    "Development Status :: 5 - Production/Stable",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development :: Libraries",
-    "Topic :: Utilities",
-]
+    authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
+    classifiers = [
+        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: OS Independent",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Utilities",
+    ]
+    description = "A simple gpsd client."
+    keywords = ["client", "gps", "gpsd", "socket", "standalone", "stream"]
+    license = "MIT"
+    name = "gpsdclient"
+    readme = "README.md"
+    repository = "https://github.com/tfeldmann/gpsdclient"
+    version = "1.4.0"
 
-[tool.poetry.scripts]
-gpsdclient = "gpsdclient.cli:main"
+    [tool.poetry.scripts]
+        gpsdclient = "gpsdclient.cli:main"
 
-[tool.poetry.dependencies]
-python = "^3.6"
+    [tool.poetry.dependencies]
+        python = ">=3.9,<4.0"
 
-[tool.poetry.dev-dependencies]
+    [tool.poetry.group.dev.dependencies]
+        mypy            = "^1.14.1"
+        pytest          = "^8.3.4"
+        pytest-cov      = "^6.0.0"
+        pytest-randomly = "^3.16.0"
+        ruff            = "^0.8.4"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+    build-backend = "poetry.core.masonry.api"
+    requires      = ["poetry-core>=1.0.0"]
+
+[tool.coverage.paths]
+    source = ["gpsdclient"]
+
+[tool.coverage.report]
+    exclude_lines = [
+        "def __repr__",
+        "if 0:",
+        "if __name__ == __main__:",
+        "if self.debug",
+        "if settings.DEBUG:",
+        "pragma: no cover",
+        "raise AssertionError",
+        "raise NotImplementedError",
+    ]
+    fail_under = 60
+    show_missing = true
+
+[tool.coverage.run]
+    branch         = true
+    omit           = ["gpsdclient/__main__.py"]
+    relative_files = true
+    source         = ["gpsdclient"]
+
+[tool.mypy]
+    files               = ["gpsdclient/"]
+    warn_return_any     = true
+    warn_unused_configs = true
+
+[tool.ruff]
+    lint.ignore    = ["COM812", "E501", "ISC001"]
+    lint.select    = ["A", "B", "C4", "DTZ", "E", "F", "FA", "I", "N", "PT", "RET", "SIM", "UP", "W"]
+    target-version = "py39"
